@@ -17,7 +17,7 @@ Bonneville Lock and Dam's first powerhouse was completed in 1938 on the Columbia
 
 <center>
 
-![Steelhead in river. <br> Steelhead Trout (NOAA Fisheries). (n.d.). Retrieved from https://www.fisheries.noaa.gov/species/steelhead-trout](steelhead.jpg){width=550px}
+![Steelhead in river. <br> Steelhead Trout (NOAA Fisheries). (n.d.). Retrieved from https://www.fisheries.noaa.gov/species/steelhead-trout](steelhead.jpg){width=630px}
 
 </center>
 
@@ -38,19 +38,11 @@ p.caption {
 
 # Load packages
 
-# General
 library(tidyverse)
 library(janitor)
 library(lubridate)
 library(here)
 library(paletteer)
-
-# Time Series 
-library(tsibble)
-library(fable)
-library(fabletools)
-library(feasts)
-library(forecast)
 
 ```
 
@@ -69,8 +61,8 @@ salmon <- read_csv("cbr_fish_passage_bonneville_allyrs_steelhead.csv") %>%
 # Wrangle data for daily counts
 
 salmon_day <- salmon %>%
-  unite(year, mm_dd, col = "date", sep = "-") %>% # unite year and mmdd column and selarate the values with "-"
-  mutate(yr_mo_day = lubridate::parse_date_time(date, "ydm")) %>% # formate date
+  unite(year, mm_dd, col = "date", sep = "-") %>% # unite year and mm_dd column and separate values with "-"
+  mutate(yr_mo_day = lubridate::parse_date_time(date, "ydm")) %>% # format date
   drop_na(yr_mo_day, value) # drop NAs from value column
 
 ```
@@ -89,21 +81,23 @@ salmon_day_gg
 
 ```
 
+A time-series plot of daily steelhead passage shows changes in the number of steelhead throughout each year. Each year contains a peak where passage counts are the highest. The pattern suggests that passage counts have some seasonality; counts start off low at the beginning of the year, slowly increase until the reach a peak, then being to decrease again.  
+
 ```{r}
 
 # Wrangle data for monthly counts
 
 salmon_parse <- salmon_day %>% 
-  mutate(month = month(yr_mo_day, label = TRUE)) %>% # oull month from yr_mo_day, label = true gives months 3 letter label
+  mutate(month = month(yr_mo_day, label = TRUE)) %>% # pull month from yr_mo_day, label = true gives months 3 letter label
   mutate(year = year(yr_mo_day))
 
 salmon_monthly <- salmon_parse %>% 
   group_by(year, month) %>%
-  summarize(total = sum(value))
+  summarize(total = sum(value)) # Add values column by month for each year
 
 ```
 
-```{r, fig.align = 'center', fig.cap = "**Figure 2. Monthly Steelhead Salmon Passage at Bonneville Dam (1940 - 2019).** Time-seris plot showing monthly changes in steelhead salmon counts at Bonneville Dam. Counts were totaled by month for each year. Data accessed at: http://www.cbr.washington.edu/dart/query/adult_graph_text"}
+```{r, fig.align = 'center', fig.cap = "**Figure 2. Monthly Steelhead Salmon Passage at Bonneville Dam (1940 - 2019).** Time-seris plot showing monthly changes in steelhead salmon counts at Bonneville Dam each year. Counts were totaled by month then plotted for each year. Data accessed at: http://www.cbr.washington.edu/dart/query/adult_graph_text"}
 
 # Graph data for monthly counts
 
@@ -118,6 +112,8 @@ salmon_month_gg
 
 ```
 
+Monthly passage counts at Bonneville Dam shows seasonality to steelhead passage. Passage counts increase in the summer months and peak in August. It also suggests an overall trend of an increase in the number of steelhead each year.
+
 ```{r}
 
 # Wrangle data for yearly counts
@@ -128,7 +124,7 @@ salmon_yearly <- salmon_parse %>%
 
 ```
 
-```{r, fig.align = 'center', fig.cap = "**Figure 3. Annual Steelhead Salmon Passage at Bonneville Dam (1940 - 2019).** Time-seris plot showing daily changes in steelhead salmon counts at Bonneville Dam. Counts were totaled by year. Data accessed at: http://www.cbr.washington.edu/dart/query/adult_graph_text"}
+```{r, fig.align = 'center', fig.cap = "**Figure 3. Annual Steelhead Salmon Passage at Bonneville Dam (1940 - 2019).** Time-seris plot showing annual changes in steelhead salmon counts at Bonneville Dam. Counts were totaled by year. Data accessed at: http://www.cbr.washington.edu/dart/query/adult_graph_text"}
 
 # Graph data for yearly counts
 
@@ -143,8 +139,11 @@ salmon_year_gg
 
 ```
 
+Annual steelhead passage counts through Bonneville Dam show an overall increasing trend in total salmon counts each year.
+
+
 </br>
-**Referneces**
+**References**
 </br>
 Columbia River DART, Columbia Basin Research, University of Washington. (2019). Adult
 Passage Graphics & Text. Available from http://www.cbr.washington.edu/dart/query/adult_graph_text
