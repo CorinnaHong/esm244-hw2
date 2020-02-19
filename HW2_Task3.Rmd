@@ -11,6 +11,19 @@ knitr::opts_chunk$set(echo = TRUE,
                       warning = FALSE)
 ```
 
+
+<style>
+p.caption {
+  font-size: 0.9em;
+  font-style: italic;
+  color: grey;
+  margin-right: 10%;
+  margin-left: 15%;  
+  text-align: left;
+}
+</style>
+
+
 ```{r}
 
 # Load packages
@@ -44,19 +57,24 @@ watersheds <- read_sf(dsn = here("Watersheds"), layer = "Watersheds")
 # Wrangle data for land cover
 
 land_cover_oahu <- land_use %>%
-  dplyr::select(landcover) %>% 
+  dplyr::select(landcover) %>%
+  filter(landcover != 0) %>%  # Remove land use category of 0
   st_crop(xmin = -158.31, xmax = -157.62, ymin = 21.26, ymax = 21.75) # Crop to Oahu
   
 ```
 
-```{r}
+```{r, fig.align = 'center', out.width = '100%'}
 
-# Add base map for land use
+# Create map for land use
+
+oahu_map <- tm_basemap("Esri.WorldTopoMap")+
+  tm_shape(land_cover_oahu) +
+  tm_fill("landcover", title = "Land Cover", alpha = 0.5) +
 
 tmap_mode("view")
 
-tm_shape(land_cover_oahu) +
-  tm_fill("landcover", alpha = 0.5)
+oahu_map
+
 
 ```
 
@@ -70,15 +88,19 @@ watersheds_oahu <- watersheds %>%
 
 ```
 
-```{r}
+```{r,  fig.align = 'center', out.width = '100%'}
 
-# Add base map for watersheds
+# Create map of watersheds
+
+
+oahu_watersheds <- tm_basemap("Esri.WorldTopoMap") +
+  tm_shape(watersheds_oahu) +
+  tm_fill("wuname", title = "Watershed", alpha = 0.5)
+
 
 tmap_mode("view")
 
-tm_shape(watersheds_oahu) +
-  tm_fill("wuname")
-
+oahu_watersheds
 
 ```
 

@@ -1,5 +1,5 @@
 ---
-title: "HW2_Task2"
+title: "Salmon Counts at Bonneville Dam"
 author: "Corinna Hong"
 date: "February 18, 2020"
 output: html_document
@@ -10,6 +10,29 @@ knitr::opts_chunk$set(echo = TRUE,
                       message = FALSE,
                       warning = FALSE)
 ```
+
+<br>
+
+Bonneville Lock and Dam's first powerhouse was completed in 1938 on the Columbia River in Oregon to provide hydropower to the Pacific Northwest (U.S. Army Corps of Engineers, n.d.). This project visualizes changes in steelhead salmon passage counts across Bonneville Dam from 1940 - 2019. It first looks at changes in daily counts, then changes in monthly and yearly counts over the same time period. 
+
+<center>
+
+![Steelhead in river. <br> Steelhead Trout (NOAA Fisheries). (n.d.). Retrieved from https://www.fisheries.noaa.gov/species/steelhead-trout](steelhead.jpg){width=550px}
+
+</center>
+
+
+<style>
+p.caption {
+  font-size: 0.9em;
+  font-style: italic;
+  color: grey;
+  margin-right: 10%;
+  margin-left: 15%;  
+  text-align: left;
+}
+</style>
+
 
 ```{r, packages}
 
@@ -45,19 +68,22 @@ salmon <- read_csv("cbr_fish_passage_bonneville_allyrs_steelhead.csv") %>%
 
 # Wrangle data for daily counts
 
-salmon_day <- trout %>%
+salmon_day <- salmon %>%
   unite(year, mm_dd, col = "date", sep = "-") %>% # unite year and mmdd column and selarate the values with "-"
   mutate(yr_mo_day = lubridate::parse_date_time(date, "ydm")) %>% # formate date
   drop_na(yr_mo_day, value) # drop NAs from value column
 
 ```
 
-```{r}
+```{r, fig.align = 'center', fig.cap = "**Figure 1. Daily Steelhead Salmon Passage at Bonneville Dam (1940 - 2019).** Time-seris plot showing daily changes in steelhead salmon counts at Bonneville Dam. Data accessed at: http://www.cbr.washington.edu/dart/query/adult_graph_text"}
 
 # Create graph of daily counts
 
 salmon_day_gg <- ggplot(data = salmon_day, aes(x = yr_mo_day, y = value)) +
-  geom_line()
+  geom_line(color = "forestgreen") +
+  labs (x = "Year", y = "Count") +
+  scale_y_continuous() +
+  theme_minimal()
 
 salmon_day_gg
 
@@ -67,7 +93,7 @@ salmon_day_gg
 
 # Wrangle data for monthly counts
 
-salmon_parse <- trout_day %>% 
+salmon_parse <- salmon_day %>% 
   mutate(month = month(yr_mo_day, label = TRUE)) %>% # oull month from yr_mo_day, label = true gives months 3 letter label
   mutate(year = year(yr_mo_day))
 
@@ -75,15 +101,18 @@ salmon_monthly <- salmon_parse %>%
   group_by(year, month) %>%
   summarize(total = sum(value))
 
-
 ```
 
-```{r}
+```{r, fig.align = 'center', fig.cap = "**Figure 2. Monthly Steelhead Salmon Passage at Bonneville Dam (1940 - 2019).** Time-seris plot showing monthly changes in steelhead salmon counts at Bonneville Dam. Counts were totaled by month for each year. Data accessed at: http://www.cbr.washington.edu/dart/query/adult_graph_text"}
 
 # Graph data for monthly counts
 
-salmon_month_gg <- ggplot(salmon_monthly, aes(x = month, y = total, group = year)) +
-  geom_line(aes(color = year))
+salmon_month_gg <- ggplot(salmon_monthly, aes(x = month, y = total, group = year)) + # separate by year
+  geom_line(aes(color = year)) + # color by year
+  labs (x = "Month", y = "Count") +
+  scale_color_paletteer_c("ggthemes::Blue-Teal") + # change color palette
+  scale_y_continuous() +
+  theme_minimal()
 
 salmon_month_gg
 
@@ -99,15 +128,26 @@ salmon_yearly <- salmon_parse %>%
 
 ```
 
-```{r}
+```{r, fig.align = 'center', fig.cap = "**Figure 3. Annual Steelhead Salmon Passage at Bonneville Dam (1940 - 2019).** Time-seris plot showing daily changes in steelhead salmon counts at Bonneville Dam. Counts were totaled by year. Data accessed at: http://www.cbr.washington.edu/dart/query/adult_graph_text"}
 
 # Graph data for yearly counts
 
 salmon_year_gg <- ggplot(salmon_yearly, aes(x = year, y = total)) +
-  geom_line()
+  geom_line(color = "forestgreen") +
+  labs (x = "Year", y = "Count") +
+  scale_y_continuous() +
+  theme_minimal()
 
 salmon_year_gg
 
 
 ```
 
+</br>
+**Referneces**
+</br>
+Columbia River DART, Columbia Basin Research, University of Washington. (2019). Adult
+Passage Graphics & Text. Available from http://www.cbr.washington.edu/dart/query/adult_graph_text
+
+</br>
+U.S. Army Corps of Engineers. (n.d). *Bonneville Lock & Dam*. Retrieved February 19, 2020, from https://www.nwp.usace.army.mil/bonneville/
