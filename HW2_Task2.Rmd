@@ -1,0 +1,113 @@
+---
+title: "HW2_Task2"
+author: "Corinna Hong"
+date: "February 18, 2020"
+output: html_document
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message = FALSE,
+                      warning = FALSE)
+```
+
+```{r, packages}
+
+# Load packages
+
+# General
+library(tidyverse)
+library(janitor)
+library(lubridate)
+library(here)
+library(paletteer)
+
+# Time Series 
+library(tsibble)
+library(fable)
+library(fabletools)
+library(feasts)
+library(forecast)
+
+```
+
+
+```{r}
+
+# Read in data
+
+salmon <- read_csv("cbr_fish_passage_bonneville_allyrs_steelhead.csv") %>% 
+  clean_names()
+
+```
+
+```{r}
+
+# Wrangle data for daily counts
+
+salmon_day <- trout %>%
+  unite(year, mm_dd, col = "date", sep = "-") %>% # unite year and mmdd column and selarate the values with "-"
+  mutate(yr_mo_day = lubridate::parse_date_time(date, "ydm")) %>% # formate date
+  drop_na(yr_mo_day, value) # drop NAs from value column
+
+```
+
+```{r}
+
+# Create graph of daily counts
+
+salmon_day_gg <- ggplot(data = salmon_day, aes(x = yr_mo_day, y = value)) +
+  geom_line()
+
+salmon_day_gg
+
+```
+
+```{r}
+
+# Wrangle data for monthly counts
+
+salmon_parse <- trout_day %>% 
+  mutate(month = month(yr_mo_day, label = TRUE)) %>% # oull month from yr_mo_day, label = true gives months 3 letter label
+  mutate(year = year(yr_mo_day))
+
+salmon_monthly <- salmon_parse %>% 
+  group_by(year, month) %>%
+  summarize(total = sum(value))
+
+
+```
+
+```{r}
+
+# Graph data for monthly counts
+
+salmon_month_gg <- ggplot(salmon_monthly, aes(x = month, y = total, group = year)) +
+  geom_line(aes(color = year))
+
+salmon_month_gg
+
+```
+
+```{r}
+
+# Wrangle data for yearly counts
+
+salmon_yearly <- salmon_parse %>% 
+  group_by(year) %>% 
+  summarize(total = sum(value))
+
+```
+
+```{r}
+
+# Graph data for yearly counts
+
+salmon_year_gg <- ggplot(salmon_yearly, aes(x = year, y = total)) +
+  geom_line()
+
+salmon_year_gg
+
+
+```
+
