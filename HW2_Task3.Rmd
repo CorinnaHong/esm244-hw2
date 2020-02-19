@@ -64,7 +64,10 @@ oahu_map
 
 
 ```
+<p style="font-size:0.9em; font-style:italic; color: grey">
 **Figure 1. Land Use Land Cover Types on Oahu.** Historical land use and land cover classification data as of 1976. Data accessed at: http://geoportal.hawaii.gov/datasets/land-use-land-cover-lulc?geometry=-165.822%2C18.755%2C-149.134%2C22.354
+</p>
+
 
 ```{r}
 
@@ -91,7 +94,9 @@ tmap_mode("view")
 oahu_watersheds
 
 ```
+<p style="font-size:0.9em; font-style:italic; color: grey">
 **Figure 2. Oahu's Watersheds.** Watersheds of Oahu layered over ESRI World Topomap. Data accessed at: http://geoportal.hawaii.gov/datasets/watersheds?geometry=-165.822%2C18.755%2C-149.134%2C22.354
+</p>
 
 </br>
 </br>
