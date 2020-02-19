@@ -1,5 +1,5 @@
 ---
-title: "HW2_Task1"
+title: "Thoughts on Open Science"
 author: "Corinna Hong"
 date: "February 12, 2020"
 output: html_document
@@ -9,9 +9,6 @@ output: html_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-
-### Thoughts on Open Science
-
 Some important goals of open science are increased public access to academic papers, better transparency and accountability in research, and data and code sharing (McKiernan et al., 2016; Bahlai et al., 2019). Open science practices can also involve the general public in a greater capacity. As Bahlai et al. (2019) point out, research in all fields is performed in tandem with society; non-scientists participate in, fund, and benefit from scientific research. Transparency in the process can strengthen the relationship between researchers and the general public. Open science practices can also benefit researchers through increased citations and media coverage, new collaborations, and retained rights to manuscripts and materials when publishing in open access journals (McKiernan et al., 2016). However, there are also drawbacks to full open-access. 
 </br>
 
@@ -20,6 +17,7 @@ Bahlai et al. (2019) write that although in theory open science sounds good, it 
 
 In my own work, the use of R and GitHub have been a necessary tool for ensuring reproducibility. After being introduced to both, I now conduct all research projects and data work in R and make it available on GitHub as a public repository. Additionally, my master’s group project utilized approaches and tools to ensure reproducibility. All data was collected in a third-party app that created the raw dataset used in our analysis. The raw data was then wrangled, visualized, and analyzed in R. However, there are still limitations to accessibility in my workflow. One big accessibility issue that is quite easy to address is the use of colors that are not discernable to those with color vision deficiencies. I could overcome this by creating a second version of my final project using color palettes that remedy this accessibility issue.  Another limitation in my work is that it is currently only shared within the UCSB community. My data science work has either been assignments submitted directly to professors, or research presented to students and faculty. Moving forward, beyond UCSB, if will be important to share my work in formats that are tailored to a public audience. 
 
+</br>
 </br>
 **References**
 </br>

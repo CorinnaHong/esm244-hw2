@@ -1,5 +1,5 @@
 ---
-title: "HW2_Task3"
+title: "Land Use/Land Cover and Watershed Maps"
 author: "Corinna Hong"
 date: "February 18, 2020"
 output: html_document
@@ -10,19 +10,6 @@ knitr::opts_chunk$set(echo = TRUE,
                       message = FALSE,
                       warning = FALSE)
 ```
-
-
-<style>
-p.caption {
-  font-size: 0.9em;
-  font-style: italic;
-  color: grey;
-  margin-right: 10%;
-  margin-left: 15%;  
-  text-align: left;
-}
-</style>
-
 
 ```{r}
 
@@ -67,9 +54,9 @@ land_cover_oahu <- land_use %>%
 
 # Create map for land use
 
-oahu_map <- tm_basemap("Esri.WorldTopoMap")+
-  tm_shape(land_cover_oahu) +
-  tm_fill("landcover", title = "Land Cover", alpha = 0.5) +
+oahu_map <- tm_basemap("Esri.WorldTopoMap") + # Add basemap
+  tm_shape(land_cover_oahu) + # Add land cover
+  tm_fill("landcover", title = "Land Cover", alpha = 0.6) # layer elements
 
 tmap_mode("view")
 
@@ -77,6 +64,7 @@ oahu_map
 
 
 ```
+**Figure 1. Land Use Land Cover Types on Oahu.** Historical land use and land cover classification data as of 1976. Data accessed at: http://geoportal.hawaii.gov/datasets/land-use-land-cover-lulc?geometry=-165.822%2C18.755%2C-149.134%2C22.354
 
 ```{r}
 
@@ -103,4 +91,13 @@ tmap_mode("view")
 oahu_watersheds
 
 ```
+**Figure 2. Oahu's Watersheds.** Watersheds of Oahu layered over ESRI World Topomap. Data accessed at: http://geoportal.hawaii.gov/datasets/watersheds?geometry=-165.822%2C18.755%2C-149.134%2C22.354
 
+</br>
+</br>
+**References**
+</br>
+Hawaii Statewide GIS Program. (2017). Land Use Land Cover (LULC). Available from http://geoportal.hawaii.gov/datasets/land-use-land-cover-lulc
+
+</br>
+Hawaii Statewide GIS Program. (2017). Surface Water Hydrologic Unit Boundaries (Watersheds). Available from : http://geoportal.hawaii.gov/datasets/watersheds
