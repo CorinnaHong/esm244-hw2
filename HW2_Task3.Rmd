@@ -53,10 +53,10 @@ land_cover_oahu <- land_use %>%
 
 # Add base map for land use
 
-tmap_mode("plot")
+tmap_mode("view")
 
 tm_shape(land_cover_oahu) +
-  tm_fill("landcover")
+  tm_fill("landcover", alpha = 0.5)
 
 ```
 
@@ -74,7 +74,7 @@ watersheds_oahu <- watersheds %>%
 
 # Add base map for watersheds
 
-tmap_mode("plot")
+tmap_mode("view")
 
 tm_shape(watersheds_oahu) +
   tm_fill("wuname")
