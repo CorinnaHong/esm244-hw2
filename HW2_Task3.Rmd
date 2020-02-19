@@ -1,0 +1,84 @@
+---
+title: "HW2_Task3"
+author: "Corinna Hong"
+date: "February 18, 2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, 
+                      message = FALSE,
+                      warning = FALSE)
+```
+
+```{r}
+
+# Load packages
+
+# General
+library(tidyverse)
+library(janitor)
+library(here)
+library(paletteer)
+
+# Spatial
+library(sf)
+library(tmap)
+
+```
+
+```{r}
+
+# Read in data
+
+land_use <- read_sf(dsn = here("Land_Use_Land_Cover_LULC"), layer = "Land_Use_Land_Cover_LULC")
+
+watersheds <- read_sf(dsn = here("Watersheds"), layer = "Watersheds")
+
+# st_crs(watersheds) checking CRS, both are EPSG: 4326
+
+```
+
+```{r}
+
+# Wrangle data for land cover
+
+land_cover_oahu <- land_use %>%
+  dplyr::select(landcover) %>% 
+  st_crop(xmin = -158.31, xmax = -157.62, ymin = 21.26, ymax = 21.75) # Crop to Oahu
+  
+```
+
+```{r}
+
+# Add base map for land use
+
+tmap_mode("plot")
+
+tm_shape(land_cover_oahu) +
+  tm_fill("landcover")
+
+```
+
+```{r}
+
+# Wrangle data for watersheds
+
+watersheds_oahu <- watersheds %>% 
+  dplyr::select(wuname) %>% 
+  st_crop(xmin = -158.31, xmax = -157.62, ymin = 21.26, ymax = 21.75) # Crop to Oahu
+
+```
+
+```{r}
+
+# Add base map for watersheds
+
+tmap_mode("plot")
+
+tm_shape(watersheds_oahu) +
+  tm_fill("wuname")
+
+
+```
+
